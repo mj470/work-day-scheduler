@@ -6,7 +6,7 @@ This homework project takes a jquery API to create a weekly scheduler that has i
 ![Initial loaded webpage](assets/Screenshot%202023-06-02%20at%209.47.30%20AM.png)
 
 # Instilation 
-This site will be deployed through GitHub
+This site will be deployed through GitHub: https://mj470.github.io/work-day-scheduler/
 
 # Usage
 This is a helpful application built through an API. This app should update to the current date. It will also have an hourly schedule with text fields open for user input.
