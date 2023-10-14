@@ -84,6 +84,10 @@ function createTimeBlockRow(index, hour) {
     $(saveBtn).append(saveIcon);
 }
 
+const backupButton = $('<button>').text('Backup Tasks').on('click', backupTasks);
+const fileInput = $('<input>').attr('type', 'file').on('change', handleFileUpload);
+$(containerEl).prepend(backupButton, fileInput);
+
 for (var i = 0; i < workDayHours.length; i++) {
     createTimeBlockRow(i, workDayHours[i]);
 }
@@ -143,7 +147,3 @@ function handleFileUpload(event) {
         reader.readAsText(file);
     }
 }
-
-const backupButton = $('<button>').text('Backup Tasks').on('click', backupTasks);
-const fileInput = $('<input>').attr('type', 'file').on('change', handleFileUpload);
-$(containerEl).append(backupButton, fileInput);
