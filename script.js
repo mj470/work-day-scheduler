@@ -109,7 +109,7 @@ loadTask();
 
 if (typeof moment !== "function") {
     console.error("moment.js is not loaded. Please ensure the library is correctly included.");
-    // Alternatively, you can show an alert or display a message on the page.
+  
 }
 
 function backupTasks() {
