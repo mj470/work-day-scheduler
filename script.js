@@ -75,11 +75,7 @@ function createTimeBlockRow(index, hour) {
     var userInput = $('<p>').addClass('description').text(' ').attr({ id: 'Hour-' + (index + 9) });
     auditTimeBlock(timeBlockEventSpace);
     
-    var saveBtn = $('<button>').addClass('col-1 saveBtn').attr({ id: 'save-button-' + (index + 9), type: 'button' }).on('click', function () {
-        var hour = $(this).siblings().first().text();
-        var task = $(this).siblings().last().text();
-        saveTask(hour, task);
-    });
+    var saveBtn = $('<button>').addClass('col-1 saveBtn').attr({ id: 'save-button-' + (index + 9), type: 'button' });
     var saveIcon = $('<i>').addClass('fas fa-save');
     
     $(containerEl).append(timeBlockRow);
@@ -106,3 +102,48 @@ $('.col-10').on('blur', 'textarea', function () {
 });
 
 loadTask();
+
+if (typeof moment !== "function") {
+    console.error("moment.js is not loaded. Please ensure the library is correctly included.");
+    // Alternatively, you can show an alert or display a message on the page.
+}
+
+function backupTasks() {
+    const tasks = {};
+    workDayHours.forEach(hour => {
+        const task = localStorage.getItem(hour);
+        if (task) {
+            tasks[hour] = task;
+        }
+    });
+    const blob = new Blob([JSON.stringify(tasks)], { type: 'application/json' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = 'tasks_backup.json';
+    link.click();
+}
+
+function handleFileUpload(event) {
+    const file = event.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            try {
+                const tasks = JSON.parse(e.target.result);
+                for (const hour in tasks) {
+                    if (tasks.hasOwnProperty(hour)) {
+                        localStorage.setItem(hour, tasks[hour]);
+                    }
+                }
+                loadTask();  
+            } catch (error) {
+                console.error("Error parsing the uploaded file:", error);
+            }
+        };
+        reader.readAsText(file);
+    }
+}
+
+const backupButton = $('<button>').text('Backup Tasks').on('click', backupTasks);
+const fileInput = $('<input>').attr('type', 'file').on('change', handleFileUpload);
+$(containerEl).append(backupButton, fileInput);
