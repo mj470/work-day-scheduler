@@ -52,6 +52,21 @@ function saveTask(hour, task) {
     }
 }
 
+function showSavedFeedback(button) {
+    var feedback = $('<span>').text('Saved!').addClass('save-feedback');
+    $(button).append(feedback);
+    setTimeout(() => {
+        feedback.remove();
+    }, 1000);  // Remove feedback after 1 second
+}
+
+$(containerEl).on('click', '.saveBtn', function() {
+    var hour = $(this).siblings('.hour').text();
+    var task = $(this).siblings('.col-10').find('p, textarea').text() || $(this).siblings('.col-10').find('p, textarea').val(); // cater for both p and textarea
+    saveTask(hour, task);
+    showSavedFeedback(this); 
+});
+
 
 function createTimeBlockRow(index, hour) {
     var timeBlockRow = $('<div>').addClass('row time-block').attr({ id: 'row-' + (index + 9) });
