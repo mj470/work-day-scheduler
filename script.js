@@ -52,44 +52,29 @@ function saveTask(hour, task) {
     }
 }
 
-for (var i = 0; i < workDayHours.length; i++) {
-    var timeBlockRow = $('<div>')
-        .addClass('row time-block')
-        .attr({ id: 'row-' + (i + 9) });
 
-    var timeBlockHour = $('<div>')
-        .addClass('col-1 hour')
-        .text(workDayHours[i])
-        .attr({ id: i + 9 });
-
-    var timeBlockEventSpace = $('<div>')
-        .addClass('col-10')
-        .attr({ id: 'time-block-' + (i + 9) });
-
-    var userInput = $('<p>')
-        .addClass('description')
-        .text(' ')
-        .attr({ id: 'Hour-' + (i + 9) });
-
+function createTimeBlockRow(index, hour) {
+    var timeBlockRow = $('<div>').addClass('row time-block').attr({ id: 'row-' + (index + 9) });
+    var timeBlockHour = $('<div>').addClass('col-1 hour').text(hour).attr({ id: index + 9 });
+    var timeBlockEventSpace = $('<div>').addClass('col-10').attr({ id: 'time-block-' + (index + 9) });
+    var userInput = $('<p>').addClass('description').text(' ').attr({ id: 'Hour-' + (index + 9) });
     auditTimeBlock(timeBlockEventSpace);
-
-    var saveBtn = $('<button>')
-        .addClass('col-1 saveBtn')
-        .attr({ id: 'save-button-' + (i + 9), type: 'button' })
-        .on('click', function () {
-            var hour = $(this).siblings().first().text();
-            var task = $(this).siblings().last().text();
-            saveTask(hour, task);
-        });
-
+    
+    var saveBtn = $('<button>').addClass('col-1 saveBtn').attr({ id: 'save-button-' + (index + 9), type: 'button' }).on('click', function () {
+        var hour = $(this).siblings().first().text();
+        var task = $(this).siblings().last().text();
+        saveTask(hour, task);
+    });
     var saveIcon = $('<i>').addClass('fas fa-save');
-
+    
     $(containerEl).append(timeBlockRow);
-    $(timeBlockRow).append(timeBlockHour);
-    $(timeBlockRow).append(timeBlockEventSpace);
+    $(timeBlockRow).append(timeBlockHour, timeBlockEventSpace, saveBtn);
     $(timeBlockEventSpace).append(userInput);
-    $(timeBlockRow).append(saveBtn);
     $(saveBtn).append(saveIcon);
+}
+
+for (var i = 0; i < workDayHours.length; i++) {
+    createTimeBlockRow(i, workDayHours[i]);
 }
 
 $('.col-10').on('click', 'p', function () {
