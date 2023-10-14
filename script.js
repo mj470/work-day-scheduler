@@ -19,30 +19,37 @@ currentDayEl.text(currentDay);
 
 function auditTimeBlock(timeBlockEventSpace) {
     var currentTimeBlockHour = moment($(timeBlockEventSpace).siblings('.hour').text().trim(), 'hA').hour();
-    $(timeBlockEventSpace).removeClass('past present future');
-
+    
     if (currentTimeBlockHour > currentHour) {
-        $(timeBlockEventSpace).addClass('future');
+        $(timeBlockEventSpace).removeClass('past present').addClass('future');
     }
     else if (currentTimeBlockHour === currentHour) {
-        $(timeBlockEventSpace).addClass('present');
+        $(timeBlockEventSpace).removeClass('past future').addClass('present');
     }
     else {
-        $(timeBlockEventSpace).addClass('past');
+        $(timeBlockEventSpace).removeClass('present future').addClass('past');
     }
 }
 
 function loadTask() {
     for (var i = 0; i < workDayHours.length; i++) {
-        let task = localStorage.getItem(workDayHours[i]);
-        if (task) {
-            $('#' + (i + 9)).siblings().first().children().text(task);
+        try {
+            let task = localStorage.getItem(workDayHours[i]);
+            if (task) {
+                $('#' + (i + 9)).siblings().first().children().text(task);
+            }
+        } catch (error) {
+            console.error("Error accessing local storage: ", error);
         }
     }
 }
 
 function saveTask(hour, task) {
-    localStorage.setItem(hour, task);
+    try {
+        localStorage.setItem(hour, task);
+    } catch (error) {
+        console.error("Error saving to local storage: ", error);
+    }
 }
 
 for (var i = 0; i < workDayHours.length; i++) {
